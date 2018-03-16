@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<package>
+
+    <name>bio_ik_service</name>
+    <version>0.0.0</version>
+
+    <description>BioIK Service</description>
+
+    <maintainer email="ruppel@informatik.uni-hamburg.de">Philipp Ruppel</maintainer>
+
+    <license>TODO</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>moveit_core</build_depend>
+    <run_depend>moveit_core</run_depend>
+
+    <build_depend>roscpp</build_depend>
+    <run_depend>roscpp</run_depend>
+
+    <build_depend>robot_model_loader</build_depend>
+    <run_depend>robot_model_loader</run_depend>
+
+    <build_depend>kinematics_base</build_depend>
+    <run_depend>kinematics_base</run_depend>
+
+    <build_depend>tf</build_depend>
+    <run_depend>tf</run_depend>
+
+    <build_depend>tf_conversions</build_depend>
+    <run_depend>tf_conversions</run_depend>
+
+    <build_depend>bio_ik</build_depend>
+    <run_depend>bio_ik</run_depend>
+
+    <build_depend>bio_ik_msgs</build_depend>
+    <run_depend>bio_ik_msgs</run_depend>
+
+    <build_depend>eigen_conversions</build_depend>
+    <run_depend>eigen_conversions</run_depend>
+
+    <export>
+    </export>
+
+</package>
