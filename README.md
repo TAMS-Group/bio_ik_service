@@ -5,7 +5,7 @@
 - Legacy /bio_ik/get_position_ik interface for compatibility
 
 ### Running the examples
-- Clone https://github.com/TAMS-Group/bio_ik and https://github.com/TAMS-Group/bioik_pr2
+- Clone https://github.com/TAMS-Group/bio_ik, https://github.com/TAMS-Group/bioik_pr2, and this repository
 - Launch the PR2+BioIK demo config: `roslaunch pr2_moveit_bio_ik demo.launch`
 - Launch one of the demo scripts, eg: `rosrun bio_ik_service_examples get_bio_ik.py`
 
