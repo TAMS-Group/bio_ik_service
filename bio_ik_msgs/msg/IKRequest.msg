@@ -17,8 +17,10 @@ bool approximate
 duration timeout
 
 # Maximum number of IK attempts
-# (For BioIK, it's usually best to set this to 1, or to not set this at all if the default value in the kinematics.yaml is set to 1,
-# and, if necessary, to increase the timeout instead.)
+# (For BioIK, it's usually best to set this to 1, or to not set this at all if the default
+# value in the kinematics.yaml is set to 1, and, if necessary, to increase the timeout instead.
+# Unless you've enabled avoid_collisions. In cluttered environments and with avoid_collisions enabled,
+# you may want to increase the number of attempts until you get a sufficiently high overall success rate.)
 int32 attempts
 
 # Joints specified as fixed_joints will always keep their initial positions and will
@@ -27,6 +29,15 @@ string[] fixed_joints
 
 # Initial robot state from which to start looking for IK solutions
 moveit_msgs/RobotState robot_state
+
+# If true, IK results will be checked for collisions, and IK results that result in collisions
+# will be rejected.
+# For reliably finding IK solutions in cluttered environments, you may also want to increase the
+# number of attempts.
+# Collision checking requires a moveit planning scene to be present. If no planning scene was found
+# the bio_ik_service node will print a ROS_ERROR message on startup or during the first collision
+# aware IK request.
+bool avoid_collisions
 
 # Typed goal lists
 PositionGoal[] position_goals
