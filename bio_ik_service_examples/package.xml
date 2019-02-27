@@ -18,6 +18,8 @@
     <build_depend>bio_ik_msgs</build_depend>
     <run_depend>bio_ik_msgs</run_depend>
 
+    <run_depend>bio_ik_service</run_depend>
+
     <export>
     </export>
 
