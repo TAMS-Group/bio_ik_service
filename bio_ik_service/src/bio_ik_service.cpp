@@ -123,13 +123,13 @@ static bool getPositionIK(moveit_msgs::GetPositionIK::Request &request,
     if (request.ik_request.ik_link_name.empty()) {
       success = robot_state.setFromIK(
           joint_model_group, request.ik_request.pose_stamped.pose,
-          request.ik_request.attempts, request.ik_request.timeout.toSec(),
+          request.ik_request.timeout.toSec(),
           callback, ik_options);
     } else {
       success = robot_state.setFromIK(
           joint_model_group, request.ik_request.pose_stamped.pose,
-          request.ik_request.ik_link_name, request.ik_request.attempts,
-          request.ik_request.timeout.toSec(), callback, ik_options);
+          request.ik_request.ik_link_name, request.ik_request.timeout.toSec(),
+          callback, ik_options);
     }
   } else {
     EigenSTL::vector_Affine3d poses;
@@ -143,12 +143,12 @@ static bool getPositionIK(moveit_msgs::GetPositionIK::Request &request,
       joint_model_group->getEndEffectorTips(end_effector_names);
       success = robot_state.setFromIK(
           joint_model_group, poses, end_effector_names,
-          request.ik_request.attempts, request.ik_request.timeout.toSec(),
+          request.ik_request.timeout.toSec(),
           callback, ik_options);
     } else {
       success = robot_state.setFromIK(
           joint_model_group, poses, request.ik_request.ik_link_names,
-          request.ik_request.attempts, request.ik_request.timeout.toSec(),
+          request.ik_request.timeout.toSec(),
           callback, ik_options);
     }
   }
@@ -335,8 +335,8 @@ static bool getBioIK(bio_ik_msgs::GetIK::Request &request,
 
   bool success = robot_state.setFromIK(
       joint_model_group, EigenSTL::vector_Affine3d(),
-      std::vector<std::string>(), request.ik_request.attempts,
-      request.ik_request.timeout.toSec(), callback, ik_options);
+      std::vector<std::string>(), request.ik_request.timeout.toSec(),
+      callback, ik_options);
 
   robot_state.update();
 

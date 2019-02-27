@@ -18,8 +18,6 @@ request.group_name = "all"
 
 request.timeout.secs = 1
 
-request.attempts = 1
-
 request.avoid_collisions = True
 
 request.ik_link_names.append("l_wrist_roll_link")

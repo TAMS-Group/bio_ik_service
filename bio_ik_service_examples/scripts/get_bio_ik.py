@@ -20,8 +20,6 @@ request.group_name = "all"
 
 request.timeout.secs = 1
 
-request.attempts = 1
-
 request.approximate = True
 
 request.position_goals.append(bio_ik_msgs.msg.PositionGoal())

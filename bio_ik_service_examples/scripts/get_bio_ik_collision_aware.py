@@ -20,8 +20,6 @@ request.group_name = "all"
 
 request.timeout.secs = 1
 
-request.attempts = 1
-
 request.avoid_collisions = True
 
 request.approximate = True

@@ -18,8 +18,6 @@ request.group_name = "all"
 
 request.timeout.secs = 1
 
-request.attempts = 1
-
 request.ik_link_names.append("l_wrist_roll_link")
 request.pose_stamped_vector.append(geometry_msgs.msg.PoseStamped())
 request.pose_stamped_vector[-1].header.frame_id = "1"
