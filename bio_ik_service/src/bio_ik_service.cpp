@@ -6,6 +6,9 @@
 #include <tf_conversions/tf_eigen.h>
 #include <tf_conversions/tf_kdl.h>
 
+#include <tf2/LinearMath/Vector3.h>
+#include <tf2/LinearMath/Quaternion.h>
+
 #include <eigen_conversions/eigen_msg.h>
 
 #include <moveit_msgs/GetPositionIK.h>
@@ -174,16 +177,16 @@ static bool getApproximateIK(moveit_msgs::GetPositionIK::Request &request,
   return getPositionIK(request, response, true);
 }
 
-static tf::Vector3 p(const geometry_msgs::Point &p) {
-  return tf::Vector3(p.x, p.y, p.z);
+static tf2::Vector3 p(const geometry_msgs::Point &p) {
+  return tf2::Vector3(p.x, p.y, p.z);
 }
 
-static tf::Vector3 p(const geometry_msgs::Vector3 &p) {
-  return tf::Vector3(p.x, p.y, p.z);
+static tf2::Vector3 p(const geometry_msgs::Vector3 &p) {
+  return tf2::Vector3(p.x, p.y, p.z);
 }
 
-static tf::Quaternion q(const geometry_msgs::Quaternion &q) {
-  return tf::Quaternion(q.x, q.y, q.z, q.w);
+static tf2::Quaternion q(const geometry_msgs::Quaternion &q) {
+  return tf2::Quaternion(q.x, q.y, q.z, q.w);
 }
 
 static double w(double w, double def = 1.0) {
