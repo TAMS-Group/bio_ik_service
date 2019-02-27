@@ -132,7 +132,7 @@ static bool getPositionIK(moveit_msgs::GetPositionIK::Request &request,
           callback, ik_options);
     }
   } else {
-    EigenSTL::vector_Affine3d poses;
+    EigenSTL::vector_Isometry3d poses;
     poses.reserve(request.ik_request.pose_stamped_vector.size());
     for (auto &pose : request.ik_request.pose_stamped_vector) {
       poses.emplace_back();
@@ -334,7 +334,7 @@ static bool getBioIK(bio_ik_msgs::GetIK::Request &request,
   }
 
   bool success = robot_state.setFromIK(
-      joint_model_group, EigenSTL::vector_Affine3d(),
+      joint_model_group, EigenSTL::vector_Isometry3d(),
       std::vector<std::string>(), request.ik_request.timeout.toSec(),
       callback, ik_options);
 
