@@ -234,10 +234,16 @@ static void convertGoals(const bio_ik_msgs::IKRequest &ik_request,
         m.link_name, p(m.position), p(m.direction), w(m.weight)));
   }
 
+#if (MOVEIT_FCL_VERSION < FCL_VERSION_CHECK(0, 6, 0))
   for (auto &m : ik_request.touch_goals) {
     ik_options.goals.emplace_back(new bio_ik::TouchGoal(
         m.link_name, p(m.position), p(m.normal), w(m.weight)));
   }
+#else
+  if (ik_request.touch_goals.size() > 0) {
+    ROS_WARN("TouchGoals are not supported with the current FCL version");
+  }
+#endif
 
   for (auto &m : ik_request.avoid_joint_limits_goals) {
     ik_options.goals.emplace_back(
