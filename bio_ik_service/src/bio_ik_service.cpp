@@ -325,6 +325,7 @@ static bool getBioIK(bio_ik_msgs::GetIK::Request &request,
 
   bio_ik::BioIKKinematicsQueryOptions ik_options;
   ik_options.return_approximate_solution = request.ik_request.approximate;
+  ik_options.fixed_joints=request.ik_request.fixed_joints;
   ik_options.replace = true;
 
   convertGoals(request.ik_request, ik_options);
