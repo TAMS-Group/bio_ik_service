@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import rospy
 
 import bio_ik_msgs
@@ -44,11 +44,11 @@ request.pose_goals[-1].pose.orientation.y = 0.0
 request.pose_goals[-1].pose.orientation.z = 0.0
 request.pose_goals[-1].pose.orientation.w = 1.0
 
-print request
+print(request)
 
 response = get_bio_ik(request).ik_response
 
-print response
+print(response)
 
 display = moveit_msgs.msg.DisplayTrajectory()
 display.trajectory_start = response.solution

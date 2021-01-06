@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import rospy
 
 import bio_ik_msgs
@@ -40,18 +40,18 @@ request.pose_goals.append(bio_ik_msgs.msg.PoseGoal())
 request.pose_goals[-1].link_name = "l_wrist_roll_link"
 request.pose_goals[-1].pose.position.x = 0.6
 request.pose_goals[-1].pose.position.y = 0.2
-#request.pose_goals[-1].pose.position.y = -0.2 # UNCOMMENT THIS TO CAUSE A COLLISION
+# request.pose_goals[-1].pose.position.y = -0.2 # UNCOMMENT THIS TO CAUSE A COLLISION
 request.pose_goals[-1].pose.position.z = 1.0
 request.pose_goals[-1].pose.orientation.x = 0.0
 request.pose_goals[-1].pose.orientation.y = 0.0
 request.pose_goals[-1].pose.orientation.z = 0.0
 request.pose_goals[-1].pose.orientation.w = 1.0
 
-print request
+print(request)
 
 response = get_bio_ik(request).ik_response
 
-print response
+print(response)
 
 display = moveit_msgs.msg.DisplayTrajectory()
 display.trajectory_start = response.solution

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import rospy
 
 import moveit_msgs.msg
@@ -53,7 +53,7 @@ request.pose_stamped_vector[-1].pose.orientation.w = 1.0
 
 response = get_position_ik(request)
 
-print response
+print(response)
 
 display = moveit_msgs.msg.DisplayTrajectory()
 display.trajectory_start = response.solution

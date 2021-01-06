@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import rospy
 
 import moveit_msgs.msg
@@ -25,7 +25,7 @@ request.pose_stamped_vector.append(geometry_msgs.msg.PoseStamped())
 request.pose_stamped_vector[-1].header.frame_id = "1"
 request.pose_stamped_vector[-1].pose.position.x = 0.6
 request.pose_stamped_vector[-1].pose.position.y = 0.2
-#request.pose_stamped_vector[-1].pose.position.y = -0.2 # UNCOMMENT THIS TO CAUSE A COLLISION
+# request.pose_stamped_vector[-1].pose.position.y = -0.2 # UNCOMMENT THIS TO CAUSE A COLLISION
 request.pose_stamped_vector[-1].pose.position.z = 1.0
 request.pose_stamped_vector[-1].pose.orientation.x = 0.0
 request.pose_stamped_vector[-1].pose.orientation.y = 0.0
@@ -56,7 +56,7 @@ request.pose_stamped_vector[-1].pose.orientation.w = 1.0
 
 response = get_position_ik(request)
 
-print response
+print(response)
 
 display = moveit_msgs.msg.DisplayTrajectory()
 display.trajectory_start = response.solution
