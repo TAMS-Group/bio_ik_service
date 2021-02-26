@@ -371,13 +371,13 @@ int main(int argc, char **argv) {
   ros::NodeHandle node_handle;
 
   ros::ServiceServer get_position_ik =
-      node_handle.advertiseService("/bio_ik/get_position_ik", &getPositionIK);
+      node_handle.advertiseService("bio_ik/get_position_ik", &getPositionIK);
 
   ros::ServiceServer get_approximate_ik = node_handle.advertiseService(
-      "/bio_ik/get_approximate_ik", &getApproximateIK);
+      "bio_ik/get_approximate_ik", &getApproximateIK);
 
   ros::ServiceServer get_bio_ik =
-      node_handle.advertiseService("/bio_ik/get_bio_ik", &getBioIK);
+      node_handle.advertiseService("bio_ik/get_bio_ik", &getBioIK);
 
   getRobotModel("");
 
