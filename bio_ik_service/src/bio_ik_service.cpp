@@ -292,7 +292,7 @@ static void convertGoals(const bio_ik_msgs::IKRequest &ik_request,
 
 static bool getBioIK(bio_ik_msgs::GetIK::Request &request,
                      bio_ik_msgs::GetIK::Response &response) {
-  auto robot_model = getRobotModel("");
+  auto robot_model = getRobotModel(request.ik_request.robot_description);
   if (!robot_model) {
     response.ik_response.error_code.val =
         moveit_msgs::MoveItErrorCodes::INVALID_OBJECT_NAME;
