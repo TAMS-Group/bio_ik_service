@@ -34,6 +34,7 @@ add_message_files(
 add_service_files(
   FILES
   GetIK.srv
+  GetSequenceIK.srv
 )
 
 generate_messages(

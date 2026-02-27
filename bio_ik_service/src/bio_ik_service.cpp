@@ -17,6 +17,7 @@
 #include <bio_ik_msgs/GetIK.h>
 #include <bio_ik_msgs/IKRequest.h>
 #include <bio_ik_msgs/IKResponse.h>
+#include <bio_ik_msgs/GetSequenceIK.h>
 
 #include <moveit/planning_scene/planning_scene.h>
 #include <moveit/planning_scene_monitor/planning_scene_monitor.h>
@@ -363,6 +364,86 @@ static bool getBioIK(bio_ik_msgs::GetIK::Request &request,
   return true;
 }
 
+// service for handling a sequence of bio ik requests, reusing the previous
+// solution in the sequence as the starting state for the next
+static bool getBioIKSequence(bio_ik_msgs::GetSequenceIK::Request &request,
+                             bio_ik_msgs::GetSequenceIK::Response &response) {
+  auto robot_model = getRobotModel("");
+  if (!robot_model) {
+    ROS_ERROR("failed to get robot model");
+    return true;
+  }
+
+  static std::mutex mutex;
+  std::lock_guard<std::mutex> lock(mutex);
+
+  moveit::core::RobotState robot_state(robot_model);
+  robot_state.setToDefaultValues();
+  robot_state.update();
+
+  for (size_t i = 0; i < request.ik_requests.size(); ++i) {
+    const auto &ik_request = request.ik_requests[i];
+    auto joint_model_group =
+        robot_model->getJointModelGroup(ik_request.group_name);
+    if (!joint_model_group) {
+      ROS_ERROR("invalid group name: %s", ik_request.group_name.c_str());
+      bio_ik_msgs::IKResponse ik_response;
+      ik_response.error_code.val = moveit_msgs::MoveItErrorCodes::INVALID_GROUP_NAME;
+      response.ik_responses.emplace_back(ik_response);
+      continue;
+    }
+
+    if (i == 0) {
+      if (!ik_request.robot_state.joint_state.name.empty() ||
+          !ik_request.robot_state.multi_dof_joint_state.joint_names.empty()) {
+        moveit::core::robotStateMsgToRobotState(ik_request.robot_state,
+                                                robot_state);
+        robot_state.update();
+      }
+    }
+
+    bio_ik::BioIKKinematicsQueryOptions ik_options;
+    ik_options.return_approximate_solution = ik_request.approximate;
+    ik_options.fixed_joints = ik_request.fixed_joints;
+    ik_options.replace = true;
+
+    convertGoals(ik_request, ik_options);
+
+    moveit::core::GroupStateValidityCallbackFn callback;
+    if (ik_request.avoid_collisions) {
+      callback = [](moveit::core::RobotState *state,
+                    const moveit::core::JointModelGroup *group,
+                    const double *values) {
+        auto planning_scene = getPlanningScene("");
+        state->setJointGroupPositions(group, values);
+        state->update();
+        return !planning_scene ||
+               !planning_scene->isStateColliding(*state, group->getName());
+      };
+    }
+
+    bool success = robot_state.setFromIK(
+        joint_model_group, EigenSTL::vector_Isometry3d(),
+        std::vector<std::string>(), ik_request.timeout.toSec(),
+        callback, ik_options);
+
+    robot_state.update();
+
+    bio_ik_msgs::IKResponse ik_response;
+    moveit::core::robotStateToRobotStateMsg(robot_state, ik_response.solution);
+    ik_response.solution_fitness = ik_options.solution_fitness;
+    if (success) {
+      ik_response.error_code.val = moveit_msgs::MoveItErrorCodes::SUCCESS;
+    } else {
+      ik_response.error_code.val = moveit_msgs::MoveItErrorCodes::NO_IK_SOLUTION;
+    }
+    response.ik_responses.emplace_back(ik_response);
+  }
+
+  return true;
+}
+
+
 int main(int argc, char **argv) {
   ros::init(argc, argv, "bio_ik");
 
@@ -378,6 +459,10 @@ int main(int argc, char **argv) {
 
   ros::ServiceServer get_bio_ik =
       node_handle.advertiseService("bio_ik/get_bio_ik", &getBioIK);
+
+  ros::ServiceServer get_bio_ik_sequence =
+      node_handle.advertiseService("bio_ik/get_bio_ik_sequence", &getBioIKSequence);
+
 
   getRobotModel("");
 
