@@ -56,16 +56,25 @@ getPlanningScene(std::string robot_description) {
   static std::unordered_map<std::string,
                             planning_scene_monitor::PlanningSceneMonitorPtr>
       planning_scene_monitors;
+  planning_scene_monitor::PlanningSceneMonitorPtr psm;
   if (planning_scene_monitors.find(robot_description) ==
       planning_scene_monitors.end()) {
     ROS_INFO("connecting to planning scene");
-    planning_scene_monitors[robot_description] =
-        planning_scene_monitor::PlanningSceneMonitorPtr(
-            new planning_scene_monitor::PlanningSceneMonitor(
-                robot_description));
+    psm = planning_scene_monitor::PlanningSceneMonitorPtr(
+        new planning_scene_monitor::PlanningSceneMonitor(
+            robot_description));
+    psm->startSceneMonitor("/move_group/monitored_planning_scene");
+    planning_scene_monitors[robot_description] = psm;
+  } else {
+    psm = planning_scene_monitors[robot_description];
   }
-  planning_scene::PlanningSceneConstPtr planning_scene =
-      planning_scene_monitors[robot_description]->getPlanningScene();
+  planning_scene::PlanningSceneConstPtr planning_scene;
+  bool updated = psm->requestPlanningSceneState("/get_planning_scene");
+  if (!updated) {
+    ROS_ERROR_ONCE("failed to get updated planning scene");
+    return planning_scene;
+  }
+  planning_scene = psm->getPlanningScene();
   if (!planning_scene) {
     ROS_ERROR_ONCE("failed to connect to planning scene");
   }
